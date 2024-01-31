@@ -1,0 +1,10 @@
+{
+    name: Init
+    script: [
+        {type: "SetColor", name: "colorWClear", value: "#ffffff00"}
+
+        {type: "SetFloat", name: "fadeLogo", value: 0}
+        {type: "SetFloat", name: "fadeSat1", value: 0}
+        {type: "SetFloat", name: "fadeSat2", value: 0}
+    ]
+}

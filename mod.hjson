@@ -1,0 +1,7 @@
+{
+    name: Crux
+    namespace: crux
+    author: Pasu4
+    description: Adds a map to the game.
+    debug: true
+}
