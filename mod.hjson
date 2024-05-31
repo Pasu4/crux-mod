@@ -4,6 +4,9 @@
     author: Pasu4
     description: Adds a map to the game. Work in progress.
     version: 0.1.0
+    tags: [
+        map
+    ]
     debug: false
     enabled: true
 }
