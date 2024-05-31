@@ -2,7 +2,7 @@
     name: Crux
     namespace: crux
     author: Pasu4
-    description: Adds a map to the game.
+    description: Adds a map to the game. Work in progress.
     version: 0.1.0
     debug: false
     enabled: true
