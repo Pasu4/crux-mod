@@ -1,4 +1,5 @@
 {
+    name: "crux"
     songName: Anuke - Boss 1
     music: boss1
     bpm: 100.0
@@ -169,7 +170,6 @@
         {type: "DrawTilesSquare", col2: "colorRed"}
     ],
     update: [
-        /*
         {type: "Condition", condition: "state_newTurn", then: [
             {type: "Turns", fromTurn: 6, toTurn: 29, interval: 4, body: [
                 {type: "MakeLaser", pos: "vec2(playerPos, mapSize+1)", dir: "vec2(0, -1)"}
@@ -183,6 +183,5 @@
                 // {type: "MakeConveyorWall", _vertical: true, _dir: "vec2(1, 0)", _pos: "vec2(1, 0) * mapSize", _spacing: 2, _offset: "state_turn % 8 >= 4"}
             ]}
         ]}
-        */
     ]
 }

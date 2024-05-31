@@ -3,5 +3,7 @@
     namespace: crux
     author: Pasu4
     description: Adds a map to the game.
-    debug: true
+    version: 0.1.0
+    debug: false
+    enabled: true
 }
