@@ -5,16 +5,28 @@ crux.colorWClear = Color.parse("#ffffff00");
 crux.colorRClear = Color.parse("#ff000000");
 
 crux.crux_drawPixel = function() {
+    // DEBUG: skip 64 beats
+    // state.turn += 64;
+    // state.smoothTurn += 64;
+
     // Like moveBeat, but every other beat
-    moveBeat2 = (1 - state.smoothTurn % 2 + state.moveBeat) / 2;
+    moveBeat2 = (1 - state.turn % 2 + state.moveBeat) / 2;
     // Like moveBeat, but every fourth beat
-    moveBeat4 = (3 - state.smoothTurn % 4 + state.moveBeat) / 4;
+    moveBeat4 = (3 - state.turn % 4 + state.moveBeat) / 4;
     
     // Like moveBeat, but in a heartbeat pattern
     heartbeat = 0;
     if(state.turn >= 80 && state.turn < 136 || state.turn >= 224 && state.turn < 312) {
         heartbeat = Math.max(moveBeat2, (moveBeat2 / 0.67) % 1);
     }
+    // log("--------------------")
+    // log("state.moveBeat:                            " + state.moveBeat)
+    // log("state.turn:                                " + state.turn)
+    // log("state.turn % 2:                            " + (state.turn % 2))
+    // log("1 - state.turn % 2:                        " + (1 - state.turn % 2))
+    // log("1 - state.turn % 2 + state.moveBeat:       " + (1 - state.turn % 2 + state.moveBeat))
+    // log("(1 - state.turn % 2 + state.moveBeat) / 2: " + (1 - state.turn % 2 + state.moveBeat) / 2)
+    // log("moveBeat2:                                 " + moveBeat2)
 
     // Logo fade in/out
     logoAlpha = 0;
@@ -66,7 +78,7 @@ crux.crux_drawPixel = function() {
         sat1Alpha = sat2Alpha = 0;
 
     // Draw background
-    if(smoothTurn < 224) {
+    if(state.turn < 224) {
         // Draw spore background
         c1 = Color.mix(crux.sporeColorA, crux.sporeColorB, Math.sin(state.time) / 2 + 0.5);
         c2 = Color.mix(crux.sporeColorA, crux.sporeColorB, Math.cos(state.time) / 2 + 0.5);
