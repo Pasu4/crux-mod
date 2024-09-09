@@ -1,13 +1,14 @@
 crux.sporeColorA = Color.parse("#7c4b80");
 crux.sporeColorB = Color.parse("#6b4474");
 crux.sporeColorC = Color.parse("#7457ce");
+crux.colorWClear = Color.parse("#ffffff00");
 crux.colorRClear = Color.parse("#ff000000");
 
 crux.crux_drawPixel = function() {
     // Like moveBeat, but every other beat
-    moveBeat2 = (1 - state.turn % 2 + state.moveBeat) / 2;
+    moveBeat2 = (1 - state.smoothTurn % 2 + state.moveBeat) / 2;
     // Like moveBeat, but every fourth beat
-    moveBeat4 = (3 - state.turn % 4 + state.moveBeat) / 4;
+    moveBeat4 = (3 - state.smoothTurn % 4 + state.moveBeat) / 4;
     
     // Like moveBeat, but in a heartbeat pattern
     heartbeat = 0;
@@ -20,19 +21,19 @@ crux.crux_drawPixel = function() {
     if(state.turn < 64) // 0-64 stay invisible
         logoAlpha = 0;
     else if(state.turn < 66) // 64-66 fade in
-        logoAlpha = (state.turn - 64) / 2;
+        logoAlpha = (state.smoothTurn - 64) / 2;
     else if(state.turn < 136) // 66-136 stay visible
         logoAlpha = 1;
     else if(state.turn < 140) // 136-140 fade out
-        logoAlpha = 1 - (state.turn - 136) / 4;
+        logoAlpha = 1 - (state.smoothTurn - 136) / 4;
     else if(state.turn < 224) // 140-224 stay invisible
         logoAlpha = 0;
     else if(state.turn < 228) // 224-228 fade in
-        logoAlpha = (state.turn - 224) / 4;
+        logoAlpha = (state.smoothTurn - 224) / 4;
     else if(state.turn < 312) // 228-312 stay visible
         logoAlpha = 1;
     else if(state.turn < 316) // 312-316 fade out
-        logoAlpha = 1 - (state.turn - 312) / 4;
+        logoAlpha = 1 - (state.smoothTurn - 312) / 4;
     else // 316+ stay invisible
         logoAlpha = 0;
 
@@ -51,21 +52,21 @@ crux.crux_drawPixel = function() {
         sat1Alpha = 1;
         sat2Alpha = 1;
     } else if(state.turn < 140) // 136-140 fade out both
-        sat1Alpha = sat2Alpha = 1 - (state.turn - 136) / 4;
+        sat1Alpha = sat2Alpha = 1 - (state.smoothTurn - 136) / 4;
     else if(state.turn < 232) // 140-232 stay invisible
         sat1Alpha = sat2Alpha = 0;
     else if(state.turn < 234) // 232-234 fade in both
-        sat1Alpha = sat2Alpha = (state.turn - 232) / 2;
+        sat1Alpha = sat2Alpha = (state.smoothTurn - 232) / 2;
     else if(state.turn < 280) { // 234-280 stay visible
         sat1Alpha = 1;
         sat2Alpha = 1;
     } else if(state.turn < 288) { // 280-288 fade out both
-        sat1Alpha = sat2Alpha = 1 - (state.turn - 280) / 8;
+        sat1Alpha = sat2Alpha = 1 - (state.smoothTurn - 280) / 8;
     } else // 288+ stay invisible
         sat1Alpha = sat2Alpha = 0;
 
     // Draw background
-    if(state.turn < 224) {
+    if(smoothTurn < 224) {
         // Draw spore background
         c1 = Color.mix(crux.sporeColorA, crux.sporeColorB, Math.sin(state.time) / 2 + 0.5);
         c2 = Color.mix(crux.sporeColorA, crux.sporeColorB, Math.cos(state.time) / 2 + 0.5);
@@ -75,7 +76,8 @@ crux.crux_drawPixel = function() {
         drawFlame(crux.sporeColorC, crux.sporeColorC, state.time);
     } else {
         // Draw red background (spinning at 30 degrees per second)
-        drawStripes(Color.parse("#7f0000"), Color.parse("#3f0000"), rad(state.time * 30));
+        // drawStripes(Color.parse("#7f0000"), Color.parse("#3f0000"), rad(state.time * 30));
+        drawStripes(Color.parse("#7f0000"), Color.parse("#3f0000"));
 
         // Draw fire
         drawFlame(Color.parse("#ff0000"), Color.parse("#ffff00"), state.time);
@@ -85,36 +87,36 @@ crux.crux_drawPixel = function() {
     if(state.turn < 8) // 0-7 stay visible
         drawBackground(Color.black);
     else if(state.turn < 16) // 8-16 fade out
-        drawBackground(Color.mix(Color.black, Color.clear, (state.turn - 8) / 8));
+        drawBackground(Color.mix(Color.black, Color.clear, (state.smoothTurn - 8) / 8));
     else if(state.turn < 136) { } // 16-136 stay invisible (draw nothing)
     else if(state.turn < 160) // 136-160 fade in
-        drawBackground(Color.mix(Color.clear, Color.black, (state.turn - 136) / 24));
+        drawBackground(Color.mix(Color.clear, Color.black, (state.smoothTurn - 136) / 24));
     else if(state.turn < 240) // 160-240 stay visible
         drawBackground(Color.black);
     else if(state.turn < 248) // 240-248 fade out
-        drawBackground(Color.mix(Color.black, Color.clear, (state.turn - 240) / 8));
+        drawBackground(Color.mix(Color.black, Color.clear, (state.smoothTurn - 240) / 8));
 
     // Draw stars
     if(state.turn >= 168 && state.turn < 184 || state.turn >= 208 && state.turn < 220) {
         col = Color.mix(crux.colorRClear, Color.white, Math.pow(moveBeat4, 2));
-        drawStars(col, col, 60, floor(state.turn / 4));
+        drawStars(col, col, 60, Math.floor(state.smoothTurn / 4));
     }
 
     // Draw space
     if(state.turn < 24) { } // 0-24 stay invisible (draw nothing)
     else if(state.turn >= 24 && state.turn < 32) // 24-32 fade in
-        drawSpace(Color.mix(Color.clear, Color.parse("#ff00007f"), (state.turn - 24) / 8));
+        drawSpace(Color.mix(Color.clear, Color.parse("#ff00007f"), (state.smoothTurn - 24) / 8));
     else if(state.turn < 160) // 32-160 pulse yellow
         drawSpace(Color.mix(Color.parse("#ff00007f"), Color.parse("#ffff007f"), Math.pow(state.moveBeat, 2)));
     else if(state.turn < 164) // 160-164 fade out
-        drawSpace(Color.mix(Color.parse("#ff00007f"), Color.clear, (state.turn - 24) / 8));
+        drawSpace(Color.mix(Color.parse("#ff00007f"), Color.clear, (state.smoothTurn - 160) / 4));
 
     // Set logo colors
-    cruxColor = Color.mix(crux.colorWClear, Color.parse("#f25555"), logoAlpha, "mul");
-    sat1Color = Color.mix(crux.colorWClear, Color.parse("#7f0000"), sat1Alpha, "mul");
-    sat1ColorFlash = Color.mix(crux.colorWClear, Color.parse("#7f3f3f"), sat1Alpha, "mul");
-    sat2Color = Color.mix(crux.colorWClear, Color.parse("#bf0000"), sat2Alpha, "mul");
-    sat2ColorFlash = Color.mix(crux.colorWClear, Color.parse("#bf5f5f"), sat2Alpha, "mul");
+    cruxColor = Color.mix(Color.parse("#f25555"), crux.colorWClear, 1 - logoAlpha, "mul");
+    sat1Color = Color.mix(Color.parse("#7f0000"), crux.colorWClear, 1 - sat1Alpha, "mul");
+    sat1ColorFlash = Color.mix(Color.parse("#7f3f3f"), crux.colorWClear, 1 - sat1Alpha, "mul");
+    sat2Color = Color.mix(Color.parse("#bf0000"), crux.colorWClear, 1 - sat2Alpha, "mul");
+    sat2ColorFlash = Color.mix(Color.parse("#bf5f5f"), crux.colorWClear, 1 - sat2Alpha, "mul");
 
     // Draw logo and satellites
     drawSpinShape(sat1Color, sat1ColorFlash, 0, 0, -rad(30), 12, 6, 5, 1.3, 1);

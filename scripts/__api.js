@@ -291,7 +291,7 @@ var state = {
      */
     time,
     /**
-     * The global time that is independent of the current beatmap. Very useful for animating values. Does not freeze in menus or when the game is paused (TODO actually test this).
+     * The global time that is independent of the current beatmap. Very useful for animating values. Does not freeze in menus or when the game is paused.
      * @type {number}
      * @readonly
      */
@@ -374,6 +374,12 @@ var state = {
      * @readonly
      */
     beatSpacing,
+    /**
+     * The current interpolated beat.
+     * @type {number}
+     * @readonly
+     */
+    smoothTurn
 }
 
 //#endregion
@@ -726,21 +732,22 @@ function drawZoom(col = Color.white, offset = 0, amount = 10, sides = 4) { }
 
 /**
  * The screen becomes light blue from the top left corner. This effect is used to transition between the menu and levels.
- * @param {number} time The screen will move if you put in a value that changes over time.
+ * @param {number} time The effect will move if you put in a value that changes over time.
  */
 function drawFadeOut(time) { }
 
 /**
  * A light blue screen disappears into the bottom right corner. This effect is used to transition between the menu and levels.
- * @param {number} time The circles will move if you put in a value that changes over time. The value should change in reverse (?).
+ * @param {number} time The effect will move if you put in a value that changes over time. The value should change in reverse (?).
  */
 function drawFadeIn(time) { }
 
 /**
  * Draws many stripes pointing towards the center. Only works inside levels.
  * @param {Color} col The color of the stripes.
+ * @param {number} [time=state.secs] The stripes will move if you put in a value that changes over time.
  */
-function drawSpace(col) { }
+function drawSpace(col, time) { }
 
 /**
  * Draws the current unit's splash image. Should only be used in unit splash drawing.
@@ -1053,9 +1060,9 @@ function makeTimedBullet(pos, dir, tex = "bullet", life = 3) { }
  * Creates a conveyor on the playing field. Should only be used in map update scripts.
  * @param {Vec2} pos The position of the conveyor.
  * @param {Vec2} dir The distance the conveyor moves per turn.
- * @param {int} [length=2] The number of conveyor belts in a row. Only 1 and 2 work. (TODO Check if that is a bug)
- * @param {string} [tex="conveyor"] The texture of the conveyor.
- * @param {int} [gen=0]
+ * @param {int} [length=2] The number of conveyor belts in a row. Only 1 and 2 work.
+ * @param {string} [tex="conveyor"] The texture of the conveyor. Does not work with a length of 2.
+ * @param {int} [gen=0] Unknown.
  */
 function makeConveyor(pos, dir, length = 2, tex = "conveyor", gen = 0) { }
 
@@ -1192,5 +1199,13 @@ function changeBpm(bpm) { }
  * @param {string} message The message to log.
  */
 function log(message) { }
+
+/**
+ * Imports a sprite from another mod so that it can be used in the current mod.
+ * @param {string} name The name of the sprite in the source mod.
+ * @param {string} namespace The namepace of the mod the sprite is from.
+ * @param {string} [alias=name] The name the sprite will have in the current mod.
+ */
+function importSprite(name, namespace, alias = name) { }
 
 //#endregion
